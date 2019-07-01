@@ -24,6 +24,9 @@ func FileByte(filename string, init func() []byte) []byte {
 }
 
 func FileLi(filename string, init []string) []string {
+
+	filename += ".li"
+
 	var li []string
 
 	filepath, isNew := FilePathIsNew(filename)
