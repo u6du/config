@@ -1,5 +1,6 @@
 package config
 
+/*
 import (
 	osUser "os/user"
 	"path"
@@ -26,3 +27,4 @@ func init() {
 	}
 	Toml.User = user{name, path.Join("home", name) + "/"}
 }
+*/
