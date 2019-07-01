@@ -1,7 +1,10 @@
 package config
 
 import (
+	"bufio"
 	"io/ioutil"
+	"os"
+	"strings"
 
 	"github.com/u6du/ex"
 )
@@ -18,6 +21,33 @@ func FileByte(filename string, init func() []byte) []byte {
 		ex.Panic(err)
 	}
 	return txt
+}
+
+func FileLi(filename string, init func() []string) []string {
+	var li []string
+
+	filepath, isNew := FilePathIsNew(filename)
+	if !isNew {
+		file, err := os.Open(filepath)
+		ex.Panic(err)
+		defer file.Close()
+
+		scanner := bufio.NewScanner(file)
+		for scanner.Scan() {
+			txt := strings.TrimSpace(scanner.Text())
+			if len(txt) > 0 {
+				li = append(li, txt)
+			}
+		}
+		ex.Panic(scanner.Err())
+	}
+
+	if isNew || len(li) == 0 {
+		li = init()
+		ioutil.WriteFile(filepath, []byte(strings.Join(li, "\n")), 0600)
+	}
+
+	return li
 }
 
 func FileString(filename string, init func() string) string {
