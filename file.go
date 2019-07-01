@@ -23,7 +23,7 @@ func FileByte(filename string, init func() []byte) []byte {
 	return txt
 }
 
-func FileLi(filename string, init func() []string) []string {
+func FileLi(filename string, init []string) []string {
 	var li []string
 
 	filepath, isNew := FilePathIsNew(filename)
@@ -43,7 +43,7 @@ func FileLi(filename string, init func() []string) []string {
 	}
 
 	if isNew || len(li) == 0 {
-		li = init()
+		li = init
 		ioutil.WriteFile(filepath, []byte(strings.Join(li, "\n")), 0600)
 	}
 
