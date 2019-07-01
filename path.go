@@ -9,6 +9,7 @@ import (
 )
 
 var ROOT string
+var USER string
 
 /*
 
@@ -19,6 +20,7 @@ var ROOT string
 
 func init() {
 	ROOT = os.Getenv("_" + PROJECT + "_ROOT")
+
 	if len(ROOT) == 0 {
 		var home string
 		user, err := osUser.Current()
@@ -31,6 +33,17 @@ func init() {
 		ROOT = path.Join(home, ".config", PROJECT)
 	}
 	os.MkdirAll(ROOT, 0700)
+
+	USER = string(FileByte("user.txt", func() []byte {
+		user, err := osUser.Current()
+		var name string
+		if err != nil {
+			name = "root"
+		} else {
+			name = user.Name
+		}
+		return []byte(name)
+	}))
 }
 
 func Mkdir(filename string) {
@@ -52,8 +65,17 @@ func FilepathIsNew(filename string) (string, bool) {
 	return filepath, notExist || stat.Size() == 0
 }
 
+func UserpathIsNew(filename string) (string, bool) {
+	return FilepathIsNew(path.Join(USER, filename))
+}
+
 func Filepath(filename string) string {
 	f, _ := FilepathIsNew(filename)
+	return f
+}
+
+func Userpath(filename string) string {
+	f, _ := UserpathIsNew(filename)
 	return f
 }
 
