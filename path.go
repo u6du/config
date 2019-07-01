@@ -18,15 +18,18 @@ var ROOT string
 */
 
 func init() {
-	var home string
-	user, err := osUser.Current()
-	if err != nil {
-		home, err = os.UserHomeDir()
-		ex.Panic(err)
-	} else {
-		home = user.HomeDir
+	ROOT = os.Getenv("_" + PROJECT + "_ROOT")
+	if len(ROOT) == 0 {
+		var home string
+		user, err := osUser.Current()
+		if err != nil {
+			home, err = os.UserHomeDir()
+			ex.Panic(err)
+		} else {
+			home = user.HomeDir
+		}
+		ROOT = path.Join(home, ".config", PROJECT)
 	}
-	ROOT = path.Join(home, ".config", "6du")
 	os.MkdirAll(ROOT, 0700)
 }
 
