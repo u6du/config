@@ -51,7 +51,7 @@ func Mkdir(filename string) {
 	}
 }
 
-func FilepathIsNew(filename string) (string, bool) {
+func FilePathIsNew(filename string) (string, bool) {
 	filepath := path.Join(ROOT, filename)
 	stat, err := os.Stat(filepath)
 	notExist := os.IsNotExist(err)
@@ -63,17 +63,21 @@ func FilepathIsNew(filename string) (string, bool) {
 	return filepath, notExist || stat.Size() == 0
 }
 
-func UserpathIsNew(filename string) (string, bool) {
-	return FilepathIsNew(path.Join(USER, filename))
+func UserFilename(filename string) string {
+	return path.Join("user", USER, filename)
 }
 
-func Filepath(filename string) string {
-	f, _ := FilepathIsNew(filename)
+func UserPathIsNew(filename string) (string, bool) {
+	return FilePathIsNew(UserFilename(filename))
+}
+
+func FilePath(filename string) string {
+	f, _ := FilePathIsNew(filename)
 	return f
 }
 
-func Userpath(filename string) string {
-	f, _ := UserpathIsNew(filename)
+func UserPath(filename string) string {
+	f, _ := UserPathIsNew(filename)
 	return f
 }
 

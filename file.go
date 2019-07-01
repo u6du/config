@@ -2,13 +2,12 @@ package config
 
 import (
 	"io/ioutil"
-	"path"
 
 	"github.com/u6du/ex"
 )
 
 func FileByte(filename string, init func() []byte) []byte {
-	filepath, isNew := FilepathIsNew(filename)
+	filepath, isNew := FilePathIsNew(filename)
 	var txt []byte
 	if isNew {
 		txt = init()
@@ -24,12 +23,16 @@ func FileByte(filename string, init func() []byte) []byte {
 func FileString(filename string, init func() string) string {
 	return string(
 		FileByte(
-			path.Join(USER, filename),
+			filename,
 			func() []byte {
 				return []byte(init())
 			}))
 }
 
 func UserByte(filename string, init func() []byte) []byte {
-	return FileByte(path.Join(USER, filename), init)
+	return FileByte(UserFilename(filename), init)
+}
+
+func UserString(filename string, init func() string) string {
+	return FileString(UserFilename(filename), init)
 }
