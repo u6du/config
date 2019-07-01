@@ -26,7 +26,7 @@ func init() {
 	} else {
 		home = user.HomeDir
 	}
-	ROOT = path.Join(home, "._config", "6du")
+	ROOT = path.Join(home, ".config", "6du")
 	os.MkdirAll(ROOT, 0700)
 }
 
