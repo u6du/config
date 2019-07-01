@@ -1,4 +1,4 @@
-module config
+module github.com/u6du/config
 
 go 1.12
 
