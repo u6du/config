@@ -34,16 +34,14 @@ func init() {
 	}
 	os.MkdirAll(ROOT, 0700)
 
-	USER = string(FileByte("user.txt", func() []byte {
+	USER = FileString("user.txt", func() string {
 		user, err := osUser.Current()
-		var name string
 		if err != nil {
-			name = "root"
+			return "root"
 		} else {
-			name = user.Name
+			return user.Name
 		}
-		return []byte(name)
-	}))
+	})
 }
 
 func Mkdir(filename string) {
