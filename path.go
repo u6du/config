@@ -42,7 +42,7 @@ func init() {
 		} else {
 			return user.Name
 		}
-	}), "\r\n")
+	}), "\r\n ")
 }
 
 func Mkdir(filename string) {
