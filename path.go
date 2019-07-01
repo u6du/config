@@ -4,6 +4,7 @@ import (
 	"os"
 	osUser "os/user"
 	"path"
+	"strings"
 
 	"github.com/u6du/ex"
 )
@@ -34,14 +35,14 @@ func init() {
 	}
 	os.MkdirAll(ROOT, 0700)
 
-	USER = FileString("user.txt", func() string {
+	USER = strings.Trim(FileString("user.txt", func() string {
 		user, err := osUser.Current()
 		if err != nil {
 			return "root"
 		} else {
 			return user.Name
 		}
-	})
+	}), "\r\n")
 }
 
 func Mkdir(filename string) {
