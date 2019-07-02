@@ -34,12 +34,7 @@ func init() {
 	os.MkdirAll(ROOT, 0700)
 }
 
-func Mkdir(filename string) {
-	dirname := path.Dir(filename)
-	if len(dirname) > 0 {
-		os.MkdirAll(path.Join(ROOT, dirname), 0700)
-	}
-}
+var Global = Config{ROOT}
 
 /*
 func Li(filename string, init string) []string {

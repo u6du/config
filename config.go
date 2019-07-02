@@ -11,25 +11,36 @@ import (
 	"github.com/u6du/ex"
 )
 
-func FilePathIsNew(filename string) (string, bool) {
-	filepath := path.Join(ROOT, filename)
+type Config struct {
+	Root string
+}
+
+func (c *Config) Mkdir(filename string) {
+	dirname := path.Dir(filename)
+	if len(dirname) > 0 {
+		os.MkdirAll(path.Join(c.Root, dirname), 0700)
+	}
+}
+
+func (c *Config) PathIsNew(filename string) (string, bool) {
+	filepath := path.Join(c.Root, filename)
 	stat, err := os.Stat(filepath)
 	notExist := os.IsNotExist(err)
 
 	if notExist {
-		Mkdir(filename)
+		c.Mkdir(filename)
 	}
 
 	return filepath, notExist || stat.Size() == 0
 }
 
-func FilePath(filename string) string {
-	f, _ := FilePathIsNew(filename)
+func (c *Config) Path(filename string) string {
+	f, _ := c.PathIsNew(filename)
 	return f
 }
 
-func FileByte(filename string, init func() []byte) []byte {
-	filepath, isNew := FilePathIsNew(filename)
+func (c *Config) Byte(filename string, init func() []byte) []byte {
+	filepath, isNew := c.PathIsNew(filename)
 	var txt []byte
 	if isNew {
 		txt = init()
@@ -42,8 +53,8 @@ func FileByte(filename string, init func() []byte) []byte {
 	return txt
 }
 
-func FileOneLineFunc(filename string, init func() string) string {
-	filepath, isNew := FilePathIsNew(filename + ".1L")
+func (c *Config) OneLineFunc(filename string, init func() string) string {
+	filepath, isNew := c.PathIsNew(filename + ".1L")
 	var txt string
 	if isNew {
 		txt = init()
@@ -57,17 +68,17 @@ func FileOneLineFunc(filename string, init func() string) string {
 	return txt
 }
 
-func FileOneLine(filename string, init string) string {
-	FileOneLineFunc(filename, func() string { return init })
+func (c *Config) OneLine(filename string, init string) string {
+	return c.OneLineFunc(filename, func() string { return init })
 }
 
-func FileLi(filename string, init []string) []string {
+func (c *Config) Li(filename string, init []string) []string {
 
 	filename += ".li"
 
 	var li []string
 
-	filepath, isNew := FilePathIsNew(filename)
+	filepath, isNew := c.PathIsNew(filename)
 	if !isNew {
 		file, err := os.Open(filepath)
 		ex.Panic(err)
@@ -91,9 +102,9 @@ func FileLi(filename string, init []string) []string {
 	return li
 }
 
-func FileString(filename string, init func() string) string {
+func (c *Config) String(filename string, init func() string) string {
 	return string(
-		FileByte(
+		c.Byte(
 			filename,
 			func() []byte {
 				return []byte(init())

@@ -2,6 +2,7 @@ package user
 
 import (
 	osUser "os/user"
+	"path"
 
 	"github.com/u6du/config"
 )
@@ -9,7 +10,7 @@ import (
 var USER string
 
 func init() {
-	USER = config.FileOneLineFunc("user", func() string {
+	USER = config.Global.OneLineFunc("user", func() string {
 		user, err := osUser.Current()
 		if err != nil {
 			return "root"
@@ -18,3 +19,5 @@ func init() {
 		}
 	})
 }
+
+var User = config.Config{Root: path.Join(config.ROOT, USER)}
