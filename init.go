@@ -3,8 +3,8 @@ package config
 import (
 	"os"
 
-	"github.com/rs/zerolog"
-	"github.com/rs/zerolog/log"
+	"github.com/u6du/zerolog"
+	"github.com/u6du/zerolog/log"
 )
 
 func init() {
