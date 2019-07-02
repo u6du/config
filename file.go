@@ -2,6 +2,7 @@ package config
 
 import (
 	"bufio"
+	"bytes"
 	"io/ioutil"
 	"os"
 	"strings"
@@ -19,6 +20,21 @@ func FileByte(filename string, init func() []byte) []byte {
 		var err error
 		txt, err = ioutil.ReadFile(filepath)
 		ex.Panic(err)
+	}
+	return txt
+}
+
+func FileOneLine(filename string, init string) string {
+	filepath, isNew := FilePathIsNew(filename)
+	var txt string
+	if isNew {
+		txt = init
+		ioutil.WriteFile(filepath, []byte(txt), 0600)
+	} else {
+		var err error
+		b, err := ioutil.ReadFile(filepath)
+		ex.Panic(err)
+		txt = string(bytes.TrimSpace(b))
 	}
 	return txt
 }
