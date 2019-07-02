@@ -34,7 +34,7 @@ func init() {
 	os.MkdirAll(ROOT, 0700)
 }
 
-var Global = Config{ROOT}
+var Path = Config{ROOT}
 
 /*
 func Li(filename string, init string) []string {

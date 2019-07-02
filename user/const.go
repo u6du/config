@@ -20,4 +20,4 @@ func init() {
 	})
 }
 
-var User = config.Config{Root: path.Join(config.ROOT, USER)}
+var Path = config.Config{Root: path.Join(config.ROOT, USER)}
