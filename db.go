@@ -12,7 +12,7 @@ const DriverName = "sqlite3"
 
 func Db(name, create, insert string, args ...interface{}) *sql.DB {
 	name = name + "." + DriverName
-	dbpath, isNew := FilePathIsNew(name)
+	dbpath, isNew := File.PathIsNew(name)
 
 	db, err := sql.Open(DriverName, dbpath)
 	ex.Panic(err)
