@@ -4,13 +4,11 @@ import (
 	"os"
 	osUser "os/user"
 	"path"
-	"strings"
 
 	"github.com/u6du/ex"
 )
 
 var ROOT string
-var USER string
 
 /*
 
@@ -34,15 +32,6 @@ func init() {
 		ROOT = path.Join(home, ".config", PROJECT)
 	}
 	os.MkdirAll(ROOT, 0700)
-
-	USER = strings.TrimSpace(FileString("user.txt", func() string {
-		user, err := osUser.Current()
-		if err != nil {
-			return "root"
-		} else {
-			return user.Name
-		}
-	}))
 }
 
 func Mkdir(filename string) {
@@ -50,36 +39,6 @@ func Mkdir(filename string) {
 	if len(dirname) > 0 {
 		os.MkdirAll(path.Join(ROOT, dirname), 0700)
 	}
-}
-
-func FilePathIsNew(filename string) (string, bool) {
-	filepath := path.Join(ROOT, filename)
-	stat, err := os.Stat(filepath)
-	notExist := os.IsNotExist(err)
-
-	if notExist {
-		Mkdir(filename)
-	}
-
-	return filepath, notExist || stat.Size() == 0
-}
-
-func UserFilename(filename string) string {
-	return path.Join("user", USER, filename)
-}
-
-func UserPathIsNew(filename string) (string, bool) {
-	return FilePathIsNew(UserFilename(filename))
-}
-
-func FilePath(filename string) string {
-	f, _ := FilePathIsNew(filename)
-	return f
-}
-
-func UserPath(filename string) string {
-	f, _ := UserPathIsNew(filename)
-	return f
 }
 
 /*

@@ -5,10 +5,28 @@ import (
 	"bytes"
 	"io/ioutil"
 	"os"
+	"path"
 	"strings"
 
 	"github.com/u6du/ex"
 )
+
+func FilePathIsNew(filename string) (string, bool) {
+	filepath := path.Join(ROOT, filename)
+	stat, err := os.Stat(filepath)
+	notExist := os.IsNotExist(err)
+
+	if notExist {
+		Mkdir(filename)
+	}
+
+	return filepath, notExist || stat.Size() == 0
+}
+
+func FilePath(filename string) string {
+	f, _ := FilePathIsNew(filename)
+	return f
+}
 
 func FileByte(filename string, init func() []byte) []byte {
 	filepath, isNew := FilePathIsNew(filename)
@@ -24,11 +42,11 @@ func FileByte(filename string, init func() []byte) []byte {
 	return txt
 }
 
-func FileOneLine(filename string, init string) string {
+func FileOneLineFunc(filename string, init func() string) string {
 	filepath, isNew := FilePathIsNew(filename + ".1L")
 	var txt string
 	if isNew {
-		txt = init
+		txt = init()
 		ioutil.WriteFile(filepath, []byte(txt), 0600)
 	} else {
 		var err error
@@ -37,6 +55,10 @@ func FileOneLine(filename string, init string) string {
 		txt = string(bytes.TrimSpace(b))
 	}
 	return txt
+}
+
+func FileOneLine(filename string, init string) string {
+	FileOneLineFunc(filename, func() string { return init })
 }
 
 func FileLi(filename string, init []string) []string {
@@ -76,12 +98,4 @@ func FileString(filename string, init func() string) string {
 			func() []byte {
 				return []byte(init())
 			}))
-}
-
-func UserByte(filename string, init func() []byte) []byte {
-	return FileByte(UserFilename(filename), init)
-}
-
-func UserString(filename string, init func() string) string {
-	return FileString(UserFilename(filename), init)
 }
