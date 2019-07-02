@@ -14,7 +14,7 @@ func init() {
 	USER = config.File.OneLineFunc("user", func() string {
 		user, err := osUser.Current()
 		if err != nil {
-			return "root"
+			return "6du"
 		} else {
 			return user.Name
 		}
