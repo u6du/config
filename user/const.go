@@ -10,7 +10,7 @@ import (
 var USER string
 
 func init() {
-	USER = config.Global.OneLineFunc("user", func() string {
+	USER = config.Path.OneLineFunc("user", func() string {
 		user, err := osUser.Current()
 		if err != nil {
 			return "root"
