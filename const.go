@@ -16,6 +16,7 @@ var ROOT string
 如果sqlite中没有数据
 从配置文件导入数据
 */
+var File Config
 
 func init() {
 	ROOT = os.Getenv("_" + PROJECT + "_ROOT")
@@ -32,9 +33,8 @@ func init() {
 		ROOT = path.Join(home, ".config", PROJECT)
 	}
 	os.MkdirAll(ROOT, 0700)
+	File = Config{ROOT}
 }
-
-var File = Config{ROOT}
 
 /*
 func Li(filename string, init string) []string {

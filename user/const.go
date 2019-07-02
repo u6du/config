@@ -8,6 +8,7 @@ import (
 )
 
 var USER string
+var File config.Config
 
 func init() {
 	USER = config.File.OneLineFunc("user", func() string {
@@ -18,6 +19,5 @@ func init() {
 			return user.Name
 		}
 	})
+	File = config.Config{Root: path.Join(config.ROOT, USER)}
 }
-
-var File = config.Config{Root: path.Join(config.ROOT, USER)}
