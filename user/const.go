@@ -20,4 +20,4 @@ func init() {
 	})
 }
 
-var Path = config.Config{Root: path.Join(config.ROOT, USER)}
+var File = config.Config{Root: path.Join(config.ROOT, USER)}
