@@ -25,7 +25,7 @@ func FileByte(filename string, init func() []byte) []byte {
 }
 
 func FileOneLine(filename string, init string) string {
-	filepath, isNew := FilePathIsNew(filename)
+	filepath, isNew := FilePathIsNew(filename + ".1L")
 	var txt string
 	if isNew {
 		txt = init
