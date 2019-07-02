@@ -19,5 +19,5 @@ func init() {
 			return user.Name
 		}
 	})
-	File = config.Config{Root: path.Join(config.ROOT, USER)}
+	File = config.Config{Root: path.Join(config.ROOT, "user", USER)}
 }
