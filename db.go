@@ -10,9 +10,38 @@ import (
 
 const DriverName = "sqlite3"
 
-func Db(name, create string, args ...interface{}) *sql.DB {
-	name = name + "." + DriverName
-	dbPath, isNew := File.PathIsNew(name)
+type db string
+
+func (d db) FileName() string {
+	return string(d) + "." + DriverName
+}
+func (d db) Conn() *sql.DB {
+	dbPath := File.Path(d.FileName())
+	db, err := sql.Open(DriverName, dbPath)
+	ex.Panic(err)
+	return db
+}
+
+func (d db) Exec(query string, args ...interface{}) sql.Result {
+	c := d.Conn()
+	defer c.Close()
+	r, err := c.Exec(query, args...)
+	ex.Warn(err)
+	return r
+}
+
+func (d db) Query(query string, args ...interface{}) *sql.Rows {
+	c := d.Conn()
+	defer c.Close()
+	r, err := c.Query(query, args...)
+	ex.Warn(err)
+	return r
+}
+
+// args = insert sql , insert sql args ...
+func Db(name, create string, args ...interface{}) db {
+	d := db(name)
+	dbPath, isNew := File.PathIsNew(d.FileName())
 
 	db, err := sql.Open(DriverName, dbPath)
 	ex.Panic(err)
@@ -48,5 +77,5 @@ func Db(name, create string, args ...interface{}) *sql.DB {
 		}
 	}
 
-	return db
+	return d
 }

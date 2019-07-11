@@ -8,9 +8,9 @@ import (
 )
 
 func TestDb(t *testing.T) {
-	dbname := "test/db"
+	name := "test/db"
 	db := Db(
-		dbname,
+		name,
 
 		`CREATE TABLE "dot" (
 "id"	INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -24,22 +24,18 @@ CREATE INDEX "dot.delay" ON "dot" ("delay" ASC);`,
 		"dot-jp.blahdns.com",
 	)
 
-	li, err := db.Query("select id,host from dot")
+	li := db.Query("select id,host from dot")
 
-	if nil != err {
-		t.Error(err)
-	} else {
-		var id uint64
-		var host string
-		count := 0
-		for li.Next() {
-			ex.Warn(li.Scan(&id, &host))
-			//t.Log(id, host)
-			count++
-		}
-		if 0 == count {
-			t.Error("row count = 0")
-		}
+	var id uint64
+	var host string
+	count := 0
+	for li.Next() {
+		ex.Warn(li.Scan(&id, &host))
+		//t.Log(id, host)
+		count++
 	}
-	ex.Warn(os.Remove(File.Path(dbname + ".sqlite3")))
+	if 0 == count {
+		t.Error("row count = 0")
+	}
+	ex.Warn(os.Remove(File.Path(name + ".sqlite3")))
 }
